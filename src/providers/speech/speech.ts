@@ -9,6 +9,7 @@ import { SpeechRecognition } from '@ionic-native/speech-recognition';
 */
 @Injectable()
 export class SpeechProvider {
+
   constructor(private speechRecognition: SpeechRecognition){
 
   }
@@ -32,4 +33,24 @@ export class SpeechProvider {
     });
     return permission;
   }
+
+  listen():Array<string>{
+    let matches_detected: Array<string>;
+
+    let options = {
+      language: 'es-CO'
+    }
+
+    this.speechRecognition.startListening(options)  
+    .subscribe((matches: Array<string>) => {
+      matches_detected = matches;
+    },
+    (onerror) => {
+      
+    });
+
+    return matches_detected;
+  }
+
+  
 }

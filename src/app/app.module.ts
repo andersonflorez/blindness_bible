@@ -7,6 +7,7 @@ import { SpeechRecognition } from '@ionic-native/speech-recognition';
 
 import { MyApp } from './app.component';
 import { SpeechProvider } from '../providers/speech/speech';
+import { ValidateProvider } from '../providers/validate/validate';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { SpeechProvider } from '../providers/speech/speech';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SpeechProvider,
-    SpeechRecognition
+    SpeechRecognition,
+    ValidateProvider
   ]
 })
 export class AppModule {}

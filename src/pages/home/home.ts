@@ -22,7 +22,7 @@ export class HomePage {
 
   speaking(){
     if(this.permission){
-      
+      this.speech.listen();
     }
   }
 }
