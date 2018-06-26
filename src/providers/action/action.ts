@@ -9,8 +9,10 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ActionProvider {
 
-  constructor(status: Array<string>) {
-  	
+  constructor() {
+
   }
+
+  
 
 }
