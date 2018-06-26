@@ -8,6 +8,7 @@ import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { MyApp } from './app.component';
 import { SpeechProvider } from '../providers/speech/speech';
 import { ValidateProvider } from '../providers/validate/validate';
+import { ActionProvider } from '../providers/action/action';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ValidateProvider } from '../providers/validate/validate';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SpeechProvider,
     SpeechRecognition,
-    ValidateProvider
+    ValidateProvider,
+    ActionProvider
   ]
 })
 export class AppModule {}
