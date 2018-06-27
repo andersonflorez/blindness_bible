@@ -1,4 +1,5 @@
 import { SpeechProvider } from './../../providers/speech/speech';
+import { ValidateProvider } from './../../providers/validate/validate';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
@@ -16,7 +17,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class HomePage {
   permission:boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private speech: SpeechProvider) {
+  valor:string;
+  constructor(public navCtrl: NavController, public navParams: NavParams, private speech: SpeechProvider, private validator: ValidateProvider) {
     this.permission = speech.hasPermission();
   }
 
@@ -24,5 +26,10 @@ export class HomePage {
     if(this.permission){
       this.speech.listen();
     }
+  }
+
+  test(){
+    let respuesta = this.validator.validate([this.valor]);
+    console.log(respuesta.response);
   }
 }
