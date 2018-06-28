@@ -1,5 +1,6 @@
 import { SpeechProvider } from './../../providers/speech/speech';
 import { ValidateProvider } from './../../providers/validate/validate';
+import { ActionProvider } from './../../providers/action/action';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
@@ -17,35 +18,39 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class HomePage {
   permission:boolean = false;
-  valor:string='';
-  constructor(public navCtrl: NavController, public navParams: NavParams, private speech: SpeechProvider, private validator: ValidateProvider) {
+  valor:string;
+  matches:Array<String>;
+  respuesta;
+  constructor(public navCtrl: NavController, public navParams: NavParams, private speech: SpeechProvider, private validator: ValidateProvider,private action: ActionProvider) {
     this.permission = speech.hasPermission();
   }
 
   speaking(){
     if(this.permission){
-      this.speech.listen();
+      this.matches = this.speech.listen();
+      this.respuesta = JSON.stringify(this.matches);
     }
   }
 
   test(){
-    let respuesta = this.validator.validate([this.valor]);
-    console.log(respuesta);
-    if(respuesta.action == 'pause'){
-
+    let response = this.validator.validate([this.valor]);
+    this.respuesta = JSON.stringify(response);
+    if(response.action == 'pause'){
+      this.action.pause();
     }
-    else if(respuesta.action == 'stop'){
-
+    else if(response.action == 'stop'){
+      this.action.stop();
     }
     else{
-      if(respuesta.book && respuesta.cap){
-
+      if(response.book && response.cap){
+        this.respuesta = JSON.stringify(this.action.play(response));
       }
-      else if(respuesta.action == 'play'){
-
+      else if(response.action == 'play'){
+        this.action.resume();
       }
       else{
-
+        this.respuesta = JSON.stringify("error");
+        console.log(response);
       }
     }
   }

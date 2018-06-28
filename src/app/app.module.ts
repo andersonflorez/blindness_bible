@@ -9,6 +9,9 @@ import { MyApp } from './app.component';
 import { SpeechProvider } from '../providers/speech/speech';
 import { ValidateProvider } from '../providers/validate/validate';
 import { ActionProvider } from '../providers/action/action';
+import { FileTransfer } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+import { Media } from '@ionic-native/media';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,10 @@ import { ActionProvider } from '../providers/action/action';
     SpeechProvider,
     SpeechRecognition,
     ValidateProvider,
-    ActionProvider
+    ActionProvider,
+    FileTransfer,
+    Media,
+    File
   ]
 })
 export class AppModule {}

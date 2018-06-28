@@ -46,7 +46,7 @@ export class SpeechProvider {
       matches_detected = matches;
     },
     (onerror) => {
-      
+      return onerror;
     });
 
     return matches_detected;

@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { File } from '@ionic-native/file';
+import { Media, MediaObject } from '@ionic-native/media';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 
 /*
   Generated class for the ActionProvider provider.
@@ -9,25 +12,35 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ActionProvider {
 
-  constructor() {
+  mediaObject: MediaObject;
+
+  constructor(private file: File,private transfer: FileTransfer,private media: Media) {
 
   } 
 
 
-  play(){
+  play(response){
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    const url = `https://s3.amazonaws.com/audiosbiblia/${response.book}_${response.cap}.mp3`;
 
+    fileTransfer.download(url, this.file.dataDirectory + 'audio.mp3').then((entry) => {
+      this.mediaObject = this.media.create(entry.nativeURL);
+      this.resume();
+    }, (error) => {
+      return error;
+    });
   }
 
   resume(){
-
+    this.mediaObject.play();
   }
 
   pause(){
-
+    this.mediaObject.pause();
   }
 
   stop(){
-    
+    this.mediaObject.stop();
   }
   
   

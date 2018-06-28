@@ -1,4 +1,3 @@
-import { ActionProvider } from './../action/action';
 import { Injectable } from '@angular/core';
 @Injectable()
 export class ValidateProvider {
@@ -7,7 +6,7 @@ export class ValidateProvider {
     
   }
 
-  status={
+  response={
     cap:'',
     book:'',
     action:''
@@ -107,11 +106,12 @@ export class ValidateProvider {
           
           let preText = match.substr(match.toLowerCase().indexOf(bookSelected[0].toLowerCase()));
           let capTemp = preText.substr(preText.search(/\d/));
-          let cap = parseInt(capTemp.indexOf(" ") > 0 ? capTemp.substr(0,capTemp.indexOf(" ")) : capTemp);
+          let cap = capTemp.indexOf(" ") > 0 ? capTemp.substr(0,capTemp.indexOf(" ")) : capTemp;
           
-          if(cap > 0 && cap <= book.caps){
+          
+          if(parseInt(cap) > 0 && parseInt(cap) <= book.caps){
             bookFilter.book = book.book;
-            bookFilter.cap = cap;
+            bookFilter.cap = cap.length == 1 ? '0'+cap : cap;
           }
         }
       });
@@ -144,10 +144,10 @@ export class ValidateProvider {
     });
 
 
-    this.status.action = actionSelected;
-    this.status.book = bookFilter.book;
-    this.status.cap = bookFilter.cap;
+    this.response.action = actionSelected;
+    this.response.book = bookFilter.book;
+    this.response.cap = bookFilter.cap;
     
-    return this.status;
+    return this.response;
   }
 }
