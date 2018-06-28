@@ -11,6 +11,23 @@ export class ActionProvider {
 
   constructor() {
 
+  } 
+
+
+  play(){
+
+  }
+
+  resume(){
+
+  }
+
+  pause(){
+
+  }
+
+  stop(){
+    
   }
   
   
