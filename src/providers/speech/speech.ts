@@ -9,48 +9,40 @@ import { SpeechRecognition } from '@ionic-native/speech-recognition';
 */
 @Injectable()
 export class SpeechProvider {
-
-  constructor(private speechRecognition: SpeechRecognition){
+  matches_detected: Array<string> = [];
+  constructor(private speechRecognition: SpeechRecognition) {
 
   }
 
-  hasPermission():boolean{
-    let permission: boolean = false;
+  hasPermission(): string {
+    let permission: string = null;
+    this.speechRecognition.hasPermission()
+      .then((hasPermission: boolean) => {
+        permission = "Tiene permisos: " + (hasPermission ? "si" : "no");
+        if (!hasPermission) {
+          this.speechRecognition.requestPermission();
+        }
+      });
 
-    this.speechRecognition.isRecognitionAvailable()
-    .then((available: boolean) => {
-      if(available){
-        this.speechRecognition.hasPermission()
-        .then((hasPermission: boolean) => {
-          if (!hasPermission) {
-            this.speechRecognition.requestPermission();
-            permission = true;
-          }else{
-            permission = true;
-          }
-        });
-      }
-    });
     return permission;
   }
 
-  listen():Array<string>{
-    let matches_detected: Array<string>;
+  listen():Array<string> {
 
     let options = {
       language: 'es-CO'
     }
 
-    this.speechRecognition.startListening(options)  
-    .subscribe((matches: Array<string>) => {
-      matches_detected = matches;
-    },
-    (onerror) => {
-      return onerror;
-    });
+    this.speechRecognition.startListening(options)
+    .subscribe(
+      (matches: Array<string>) => {
+        this.matches_detected = matches;
+      },(onerror: Array<string>) => {
+        this.matches_detected = onerror;
+      });
 
-    return matches_detected;
+    return this.matches_detected;
   }
 
-  
+
 }

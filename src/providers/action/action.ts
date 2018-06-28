@@ -20,12 +20,17 @@ export class ActionProvider {
 
 
   play(response){
+    if(typeof this.mediaObject === "object"){
+      this.mediaObject.release();
+    }
+    
     const fileTransfer: FileTransferObject = this.transfer.create();
     const url = `https://s3.amazonaws.com/audiosbiblia/${response.book}_${response.cap}.mp3`;
 
     fileTransfer.download(url, this.file.dataDirectory + 'audio.mp3').then((entry) => {
+      
       this.mediaObject = this.media.create(entry.nativeURL);
-      this.resume();
+      this.mediaObject.play();
     }, (error) => {
       return error;
     });
@@ -41,6 +46,7 @@ export class ActionProvider {
 
   stop(){
     this.mediaObject.stop();
+    this.mediaObject.release();
   }
   
   

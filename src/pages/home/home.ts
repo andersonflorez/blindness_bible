@@ -1,3 +1,4 @@
+import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { SpeechProvider } from './../../providers/speech/speech';
 import { ValidateProvider } from './../../providers/validate/validate';
 import { ActionProvider } from './../../providers/action/action';
@@ -17,23 +18,33 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'home.html',
 })
 export class HomePage {
-  permission:boolean = false;
+  permission:String;
   valor:string;
-  matches:Array<String>;
-  respuesta;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private speech: SpeechProvider, private validator: ValidateProvider,private action: ActionProvider) {
-    this.permission = speech.hasPermission();
+  respuesta:string;
+  matches: Array<String>
+  constructor(private speechRecognition: SpeechRecognition, public navCtrl: NavController, public navParams: NavParams, private speech: SpeechProvider, private validator: ValidateProvider,private action: ActionProvider) {
+    this.speech.hasPermission();
   }
 
   speaking(){
-    if(this.permission){
-      this.matches = this.speech.listen();
-      this.respuesta = JSON.stringify(this.matches);
+    this.respuesta = "escuchando";
+    let options = {
+      language: 'es-CO',
+      showPopup: true,
     }
+
+    this.speechRecognition.startListening(options)
+    .subscribe(
+      (matches: Array<string>) => {
+        this.test(matches);
+      },(onerror) => {
+        this.respuesta = JSON.stringify(onerror);
+      });
   }
 
-  test(){
-    let response = this.validator.validate([this.valor]);
+  test(matches:Array<string>){
+    let response = this.validator.validate(matches);
+
     this.respuesta = JSON.stringify(response);
     if(response.action == 'pause'){
       this.action.pause();
@@ -43,7 +54,7 @@ export class HomePage {
     }
     else{
       if(response.book && response.cap){
-        this.respuesta = JSON.stringify(this.action.play(response));
+        this.action.play(response);
       }
       else if(response.action == 'play'){
         this.action.resume();
@@ -52,6 +63,7 @@ export class HomePage {
         this.respuesta = JSON.stringify("error");
         console.log(response);
       }
+
     }
   }
 }
